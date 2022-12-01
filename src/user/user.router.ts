@@ -27,3 +27,59 @@ userRouter.get("/:id", async (request: Request, response: Response) => {
     return;
   }
 });
+
+// POST: Create a Author
+// Params: name, email, token
+userRouter.post(
+  "/",
+  body("name").isString(),
+  body("email").isString(),
+  body("token").isString(),
+  async (request: Request, response: Response) => {
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array });
+    }
+    try {
+      const user = request.body;
+      const newUser = await UserService.createUser(user);
+      return response.status(201).json(newUser);
+    } catch (error: any) {
+      return;
+    }
+  }
+);
+
+// PUT: Updating an Author
+// Params: name, email
+userRouter.put(
+  "/:id",
+  body("name").isString(),
+  body("email").isString(),
+  async (request: Request, response: Response) => {
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array });
+    }
+    const id: number = parseInt(request.params.id, 10);
+    try {
+      const user = request.body;
+      const updatedUser = await UserService.updateUser(user, id);
+      return response.status(200).json(updatedUser);
+    } catch (error: any) {
+      return response.status(500).json(error.message);
+    }
+  }
+);
+
+userRouter.delete("/:id", async (request: Request, response: Response) => {
+  const id: number = parseInt(request.params.id, 10);
+  try {
+    await UserService.deleteUser(id);
+    return response.status(204).json("User deleted");
+  } catch (error: any) {
+    return response.status(500).json(error.message);
+  }
+});
