@@ -1,26 +1,9 @@
-import * as dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
+import app from "./app";
+import router from "./routes/router";
 
-import { userRouter } from "./user/user.router";
-import { taskRouter } from "./tasks/task.router";
-
-dotenv.config();
-
-if (!process.env.PORT) {
-  process.exit(1);
-}
+app.use("/api", router);
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.use("/api/users", userRouter);
-app.use("/api/tasks", taskRouter);
-
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
