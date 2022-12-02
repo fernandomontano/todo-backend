@@ -1,6 +1,6 @@
 import { db } from "../utils/db.server";
 
-type User = {
+export type User = {
   id: number;
   name: string;
   email: string;

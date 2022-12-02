@@ -1,58 +1,47 @@
-import internal from "stream";
+import { User } from "../user/user.services";
 import { db } from "../utils/db.server";
 
 type Task = {
   description: string;
   taskStateId: number;
-  userId: number;
+  user: User;
 };
 
-export const createTask = async (task: Omit<Task, "id">): Promise<Task> => {
-  const { description, taskStateId, userId } = task;
-  return db.task.create({
-    data: {
-      description,
-      taskStateId,
-      userId,
-    },
+export const listTaskOnUser = async (): Promise<Task[] | null> => {
+  return db.task.findMany({
     select: {
       description: true,
       taskStateId: true,
-      userId: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          token: true,
+        },
+      },
     },
   });
 };
 
-export const listTaskOnUser = async (id: number): Promise<Task[] | null> => {
+export const getTasks = async (userId: number): Promise<Task[] | null> => {
   return db.task.findMany({
     where: {
-      userId: id,
+      user: {
+        id: userId,
+      },
     },
     select: {
       description: true,
       taskStateId: true,
-      userId: true,
-    },
-  });
-};
-
-export const updateTask = async (
-  task: Omit<Task, "id">,
-  id: number
-): Promise<Task> => {
-  const { description, taskStateId } = task;
-  return db.task.update({
-    where: {
-      id,
-    },
-    data: {
-      description,
-      taskStateId,
-    },
-    select: {
-      description: true,
-      taskStateId: true,
-      userId: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          token: true,
+        },
+      },
     },
   });
 };
