@@ -16,10 +16,10 @@ userRouter.get("/", async (request: Request, response: Response) => {
 });
 
 // GET: A single User by Id
-userRouter.get("/:id", async (request: Request, response: Response) => {
-  const id: number = parseInt(request.params.id, 10);
+userRouter.get("/:token", async (request: Request, response: Response) => {
+  const token: string = request.params.token;
   try {
-    const user = await UserService.getUser(id);
+    const user = await UserService.getUser(token);
     return user
       ? response.status(200).json(user)
       : response.status(404).json("Not found");

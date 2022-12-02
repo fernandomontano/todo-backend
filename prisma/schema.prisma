@@ -16,7 +16,7 @@ model User {
   updatedAt DateTime @updatedAt
   name      String
   email     String
-  token     String
+  token     String   @unique
   Task      Task[]
 }
 

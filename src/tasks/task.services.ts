@@ -1,4 +1,4 @@
-import { User } from "../user/user.services";
+import { User } from "@prisma/client";
 import { db } from "../utils/db.server";
 
 type Task = {
@@ -18,6 +18,8 @@ export const listTaskOnUser = async (): Promise<Task[] | null> => {
           name: true,
           email: true,
           token: true,
+          createdAt: true,
+          updatedAt: true,
         },
       },
     },
@@ -40,6 +42,8 @@ export const getTasks = async (userId: number): Promise<Task[] | null> => {
           name: true,
           email: true,
           token: true,
+          createdAt: true,
+          updatedAt: true,
         },
       },
     },

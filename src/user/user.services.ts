@@ -1,11 +1,5 @@
 import { db } from "../utils/db.server";
-
-export type User = {
-  id: number;
-  name: string;
-  email: string;
-  token: string;
-};
+import { User } from "@prisma/client";
 
 export const listUsers = async (): Promise<User[]> => {
   return db.user.findMany({
@@ -14,14 +8,24 @@ export const listUsers = async (): Promise<User[]> => {
       name: true,
       email: true,
       token: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
 
-export const getUser = async (id: number): Promise<User | null> => {
+export const getUser = async (token: string): Promise<User | null> => {
   return db.user.findUnique({
     where: {
-      id,
+      token,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      token: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
@@ -39,6 +43,8 @@ export const createUser = async (user: Omit<User, "id">): Promise<User> => {
       name: true,
       email: true,
       token: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
@@ -62,6 +68,8 @@ export const updateUser = async (
       name: true,
       email: true,
       token: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 };
