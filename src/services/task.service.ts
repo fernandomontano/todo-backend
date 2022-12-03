@@ -7,6 +7,25 @@ type Task = {
   user: User;
 };
 
+export const listTasks = async (): Promise<Task[]> => {
+  return db.task.findMany({
+    select: {
+      description: true,
+      taskStateId: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          token: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+  });
+};
+
 export const listTaskOnUser = async (): Promise<Task[] | null> => {
   return db.task.findMany({
     select: {
@@ -26,11 +45,11 @@ export const listTaskOnUser = async (): Promise<Task[] | null> => {
   });
 };
 
-export const getTasks = async (userId: number): Promise<Task[] | null> => {
+export const getTasks = async (token: string): Promise<Task[] | null> => {
   return db.task.findMany({
     where: {
       user: {
-        id: userId,
+        token,
       },
     },
     select: {
