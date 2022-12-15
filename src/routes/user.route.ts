@@ -18,7 +18,7 @@ userRouter.get("/", getUser);
 userRouter.get("/:token", getSingleUser);
 
 // POST: Create a user
-userRouter.post("/", validate(createUser), createUserController);
+userRouter.post("/", createUserController);
 
 // PUT: Updating an User
 userRouter.put("/:id", updateUser);
