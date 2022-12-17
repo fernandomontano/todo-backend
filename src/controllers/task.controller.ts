@@ -22,10 +22,21 @@ export const getTasks = async (request: any, response: Response) => {
 };
 
 export const getTaskById = async (request: Request, response: Response) => {
-  const id: number = parseInt(request.params.userId, 10);
+  const id: number = parseInt(request.params.id, 10);
   try {
-    const tasks = await TaskService.listTaskOnUser();
+    const tasks = await TaskService.listTaskOnUser(id);
     return response.status(200).json(tasks);
+  } catch (err: any) {
+    return response.status(500).json(err.message);
+  }
+};
+
+export const createTask = async (request: Request, response: Response) => {
+  const task = request.body;
+  const userId: number = parseInt(request.params.id, 10);
+  try {
+    const newTasks = await TaskService.createTask(task, userId);
+    response.status(201).json(newTasks);
   } catch (err: any) {
     return response.status(500).json(err.message);
   }
