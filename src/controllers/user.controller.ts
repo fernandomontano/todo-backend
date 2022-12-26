@@ -14,9 +14,7 @@ export const getSingleUser = async (request: Request, response: Response) => {
   const token: string = request.params.token;
   try {
     const user = await UserService.getUser(token);
-    return user
-      ? response.status(200).json(user)
-      : response.status(404).json("Not found");
+    if (user) return response.status(200).json(user);
   } catch (error: any) {
     return;
   }
